@@ -1,9 +1,20 @@
 1. What do we mean when we say that MySQL has a client-server architecture?
 
+- This means that clients connect to the server to perform database operations such as reading or storing data.
+
 2. Use the monitor help to look up information on the SELECT statement. (We’ll discuss SELECT in detail in Chapter 5.)
+
+- N/A
 
 3. What is the difference between using the monitor in interactive mode and using
 the monitor in batch mode?
 
+- Interactive mode allows a user to type in individual SQL queries or commands and then view the results. Batch mode reads and executes a list of commands from a specified file.
+
 4. What do the monitor user, password, and database options do?
 
+- User specifies the username to use when connecting to the MySQL Server
+
+- Password refers to the password of that user
+
+- Database specifies the database to use
