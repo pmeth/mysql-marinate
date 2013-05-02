@@ -1,0 +1,61 @@
+Q1. What is command completion?
+A   Command completion is a feature of *nix based shells and Windows command
+    shell to expand any initial text a user has entered into full or partial
+    pathnames that begin with the text the user entered.
+
+    For example, on a Linux machine with bash, if I enter the following
+     command sequence:
+
+       ls -l /bin/ba<TAB>
+
+    the bash shell will expand it to:
+
+       ls -l /bin/bash
+
+    using <TAB> as the command completion sequence.
+
+    Command completion allows the user to enter a minimal number of
+    characters, followed by the completion sequence to complete a
+    command.
+
+Q2. What are the relative advantages of installing MySQL using the package,
+    directory archive (tarball or “no-install”), or compiled methods?
+A   Some of the advantages are:
+
+    o Installing MySQL using a package typically installs the mysql support
+      programs, server and database data files in a standard location:
+
+      - support programs are typically installed in /usr/bin
+      - the server is typically installed in /usr/libexec/mysqld
+      - database file are typically installed in /var/lib/mysql
+
+    o Installing MySQL from an archive allows a non-privileged user to
+      install and run the software in parallel with a running production
+      database or the the pre-installed system version.
+
+      This parallel installation of the database server would have to use
+      a different unix socket (or named pipe on windows systems) and/or
+      a different network port if it's being accessed from a network-based
+      client.
+    o The compiled method allows the user to customize those features they
+      believe they (do not) require.
+
+      A mysql server bundled in a package or binary tar ball will have
+      been pre-compiled by someone other than yourself.
+
+      Consequently, it may lack some of the features that you require or
+      be overly bloated with features that you do not require. A mysql
+      server that is bloated with unncessary features will run slower on
+      the server machine and consume more of its resources than you had
+      forseen.
+      
+Q3. How do you verify the integrity of downloaded packages?
+A3  Verify that the md5 sum of the package you downloaded matches the md5
+    sum provided on the download web site
+
+Q4. How do you add the MySQL bin directory to the operating system path?
+A   Modifying the command search path.
+
+    In bash on *nix based systems, this would be:
+
+    PATH=/MySQL/BIN/DIRECTORY:$PATH export PATH
