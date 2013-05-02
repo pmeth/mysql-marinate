@@ -1,0 +1,46 @@
+Q1 What do we mean when we say that MySQL has a client-server architecture?
+A  All client/server models have two parts, a system or server specific part
+   referred to as the "server", and a user-specific part that an end user
+   uses to interact with the server or system specific part.
+
+   In the context of mysql, the "mysql" program, while the mysqld (referred
+   to as the mysql daemon) is the system or server specific part.
+
+   The "mysql" client connects to the "mysqld" server, performing a number
+   of tasks including administering databases and databases tables, and
+   managing the data within each.
+
+Q3 What is the difference between using the monitor in interactive mode and
+   using the monitor in batch mode?
+A  Using the monitor in interactive mode allows the execution of single
+   MySQL and SQL commands in an interactive environment with command-line
+   completion available on demand.
+
+   Using the monitor in batch mode allows for the execution of MySQL and SQL
+   commands from an external file which contains one (or more) commands.
+
+   Batch mode can be invoked in two ways:
+   1. Specifying the external file that contains one (or more) commands using
+      the MySQL "source" command.
+   2. Specifying the external file that contains one (or more) commands as
+      input to the "mysql" monitor program:
+
+      mysql --user root \
+            --password=The_Password \
+            --database=Desired_Database \
+            < /path/of/external/file.sql
+
+Q4 What do the monitor user, password, and database options do?
+A  The "user", "password" and "database" options allow the user to specify:
+   (1) The username that the monitor program will use to connect to the
+       mysqld server
+   (2) The password corresponding to the username specified in the "user"
+       option. The monitor will attempt to authenticate itself to the mysqld
+       server using the specified username and password.
+   (3) If the mysql monitor is able to authenticate itself to the mysqld
+       server using the specified username and password, it will attempt
+       to connect to the database specified by the "database" option.
+
+       Specifying the "database" option is similar is similar to invoking
+       the "use <database name>" MySQL command after successfully authenti-
+       cating itself to the mysqld server.
