@@ -3,17 +3,40 @@ Homework for Chapter 2 of Learning MySQL (2006 edition), from p. 94:
 Exercises:
 1) What is command completion?
 
+Command completion, also sometimes called Tab Completion, is a feature of the shell where commands are either filled out, or multiple possibilities listed, when the tab key is pressed. It works on commands as well as some parameters, such as file and path names.
+
 2) What are the relative advantages of installing MySQL using the package,
  directory archive (tarball or "no-install", or compiled methods?
 
+Package: easy to get off the ground, files located in consistent places
+Directory archive: Don't need to run the installer or put the files anywhere special, can run as non-admin user
+Compiled: Most flexibility, some performance benefits possible from compiling for your particular setup
+
 3) How do you verify the integrity of downloaded packages?
 
+Using the md5 command on the download (I'm on a Mac - on Linux, I'd use md5sum) I found the hash of the downloaded package and compared it with the one on the MySQL download page.
+
 4) How do you add the MySQL bin directory to the operating system path?
+
+I added the following line to my ~/.bash_profile
+
+export PATH=/usr/local/mysql/bin:$PATH
 
 Additional Exercises (not in the book): 
 1) Document how you installed MySQL and any issues you came across with installation. 
  (The goal is to be easy to install it again on a similar machine.)
 
+First, I had to remove an old, half-installed MySQL setup from two OS upgrades ago, using the instructions here:
+http://johnmcostaiii.net/2011/removing-mysql-osx-lion
+I then downloaded the OS X 10.8 MySQL DMG from: http://dev.mysql.com/downloads/mysql/
+From that .DMG file, I installed mysql-5.6.11-osx10.7-x86_64.pkg, MySQLStartupItem.pkg and MySQL.prefPane
+Next, I added "export PATH=/usr/local/mysql/bin:$PATH" to my ~/.bash_profile file, and then entered "source .bash_profile".
+Finally, I changed the root password for MySQL with 'mysqladmin --user root password "anewrootpasswordImnottellingyou"'
+
 2) Document where important files should be.
+Binary executable files for the installation are in /usr/local/mysql/bin, and since /usr/local/mysql is a symlink, they're really in /usr/local/mysql-5.6.11-osx10.7-x86_64/bin
+Configuration file is at /usr/local/mysql/my.cnf -> /usr/local/mysql-5.6.11-osx10.7-x86_64/my.cnf
+Data is stored in /usr/local/mysql/data -> /usr/local/mysql-5.6.11-osx10.7-x86_64/data
+The UNIX socket is /tmp/mysql.sock
 
 Do not forget to do a pull request when your homework is complete.
