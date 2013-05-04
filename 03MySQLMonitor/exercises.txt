@@ -1,9 +1,75 @@
-1. What do we mean when we say that MySQL has a client-server architecture?
+1. 
 
-2. Use the monitor help to look up information on the SELECT statement. (We’ll discuss SELECT in detail in Chapter 5.)
+Client-Server architecture mainly consist of two components client and server where client requests for a service 
+and the server does that service for the client. A server can serve multiple clients whereas multiple clients 
+can send request to a single server.
 
-3. What is the difference between using the monitor in interactive mode and using
-the monitor in batch mode?
+2. 
+mysql> help select
+Name: 'SELECT'
+Description:
+Syntax:
+SELECT
+    [ALL | DISTINCT | DISTINCTROW ]
+      [HIGH_PRIORITY]
+      [STRAIGHT_JOIN]
+      [SQL_SMALL_RESULT] [SQL_BIG_RESULT] [SQL_BUFFER_RESULT]
+      [SQL_CACHE | SQL_NO_CACHE] [SQL_CALC_FOUND_ROWS]
+    select_expr [, select_expr ...]
+    [FROM table_references
+    [WHERE where_condition]
+    [GROUP BY {col_name | expr | position}
+      [ASC | DESC], ... [WITH ROLLUP]]
+    [HAVING where_condition]
+    [ORDER BY {col_name | expr | position}
+      [ASC | DESC], ...]
+    [LIMIT {[offset,] row_count | row_count OFFSET offset}]
+    [PROCEDURE procedure_name(argument_list)]
+    [INTO OUTFILE 'file_name'
+        [CHARACTER SET charset_name]
+        export_options
+      | INTO DUMPFILE 'file_name'
+      | INTO var_name [, var_name]]
+    [FOR UPDATE | LOCK IN SHARE MODE]]
 
-4. What do the monitor user, password, and database options do?
+SELECT is used to retrieve rows selected from one or more tables, and
+can include UNION statements and subqueries. See [HELP UNION], and
+http://dev.mysql.com/doc/refman/5.1/en/subqueries.html.
+
+The most commonly used clauses of SELECT statements are these:
+
+o Each select_expr indicates a column that you want to retrieve. There
+  must be at least one select_expr.
+
+o table_references indicates the table or tables from which to retrieve
+  rows. Its syntax is described in [HELP JOIN].
+
+o The WHERE clause, if given, indicates the condition or conditions
+  that rows must satisfy to be selected. where_condition is an
+  expression that evaluates to true for each row to be selected. The
+  statement selects all rows if there is no WHERE clause.
+
+  In the WHERE expression, you can use any of the functions and
+  operators that MySQL supports, except for aggregate (summary)
+  functions. See
+  http://dev.mysql.com/doc/refman/5.1/en/expressions.html, and
+  http://dev.mysql.com/doc/refman/5.1/en/functions.html.
+
+SELECT can also be used to retrieve rows computed without reference to
+any table.
+
+URL: http://dev.mysql.com/doc/refman/5.1/en/select.html
+
+
+3. In interactive mode, we only can run queries one by one. But in batch mode we can run a set of queries from external
+source in a particular order. The query set in batch mode is reusable. 
+
+
+4. user(-u) option accepts the username to connect to mysql server.
+  password (-p) option accepts the password for the user
+  database option accepts the database name to be connected
+
+altogether we use the following command to connect to a mysql server in localhost.
+ mysql -u abdur -p test_db
+
 
