@@ -3,17 +3,22 @@ Homework for Chapter 2 of Learning MySQL (2006 edition), from p. 94:
 Exercises:
 1) What is command completion?
 
+Command completion is a feature in command line client which helps user to compelte a command/file/directory name.
+The Tab key is used for command compeltion.
+
 2) What are the relative advantages of installing MySQL using the package,
  directory archive (tarball or "no-install", or compiled methods?
 
+Package installation provides step by step installation wizard which is easier and less error-prone. Also it comes with 
+other tools which helps to configure files/setting and provides easy option to start/stop the server.
+
 3) How do you verify the integrity of downloaded packages?
+
+Integrity of the packages can be checked using MD5 checksum. Each package comes with its own checksum, after downloading 
+the files, user can generate checksum and match it with the providers checksum to make sure downloaded packages is not
+corrupted.
 
 4) How do you add the MySQL bin directory to the operating system path?
 
-Additional Exercises (not in the book): 
-1) Document how you installed MySQL and any issues you came across with installation. 
- (The goal is to be easy to install it again on a similar machine.)
-
-2) Document where important files should be.
-
-Do not forget to do a pull request when your homework is complete.
+In Windows, we can add the Mysql bin directory (C:\Program Files\MySQL\MySQL Server 5.1\bin) to the system variables.
+System Properties -> Environment Variables -> System  variables -> Edit System Variables.
