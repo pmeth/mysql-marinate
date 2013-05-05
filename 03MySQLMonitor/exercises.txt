@@ -1,9 +1,39 @@
 1. What do we mean when we say that MySQL has a client-server architecture?
 
+MySQL consists of one or more clients - such as the MySQL monitor or a PHP application using a MySQL library - connecting to a MySQL server. The server handles storing, retrieving and searching the data that the clients provide / request.
+
 2. Use the monitor help to look up information on the SELECT statement. (We’ll discuss SELECT in detail in Chapter 5.)
+
+Since the whole output is very long, I'll just include a few lines:
+
+"mysql> help SELECT
+Name: 'SELECT'
+Description:
+Syntax:
+SELECT
+    [ALL | DISTINCT | DISTINCTROW ]
+      [HIGH_PRIORITY]
+      [STRAIGHT_JOIN]
+      [SQL_SMALL_RESULT] [SQL_BIG_RESULT] [SQL_BUFFER_RESULT]
+      [SQL_CACHE | SQL_NO_CACHE] [SQL_CALC_FOUND_ROWS]
+    select_expr [, select_expr ...]
+    [FROM table_references
+      [PARTITION partition_list]
+    [WHERE where_condition]
+    [GROUP BY {col_name | expr | position}
+      [ASC | DESC], ... [WITH ROLLUP]]
+    [HAVING where_condition]
+    [ORDER BY {col_name | expr | position}
+      [ASC | DESC], ...]
+"
 
 3. What is the difference between using the monitor in interactive mode and using
 the monitor in batch mode?
 
+In interactive mode, a command prompt is given at which the user can enter commands individually and examine the output as they go. In batch mode, a sequence of commands and queries are specified in a text file which are all executed sequentially.
+
 4. What do the monitor user, password, and database options do?
 
+User: specifies the username to connect to the database server with. If not specified, the user root is assumed.
+Password: specifies the password for the user you're connecting as. If the option is given but no password provided, one will be asked for. If the option is not given, the user is assumed to not requrie one.
+Database: specifies which database to start using when connecting. If not specified, you'll need to specify it later with the USE command.
