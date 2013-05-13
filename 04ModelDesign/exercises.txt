@@ -27,7 +27,7 @@ compilations, where a compilation is an album that contains tracks by two
 or more different artists.
 
 See Question3.jpg or Question3.vsd (Diagram is in Visio ER format which is a modified version of 
-Chen's ER format.
+Chen's ER format).
 
 4. Create an ER diagram for an online media store using the following requirements:
  - There are two types of product: music CDs and video DVDs.
@@ -83,3 +83,7 @@ The .odg file was created on Open Office, but all compatibile programs can be se
 http://www.fileinfo.com/extension/odg
 
 Or you can just hand-draw diagrams for questions 3 and 4 and take a picture, as in the Diagram4_11.jpg file.
+
+
+See Question4.jpg or Question4.vsd (Diagram is in Visio ER format which is a modified version of 
+Chen's ER format).
