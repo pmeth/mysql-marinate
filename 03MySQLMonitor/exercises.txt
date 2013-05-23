@@ -1,9 +1,20 @@
-1. What do we mean when we say that MySQL has a client-server architecture?
+﻿1. What do we mean when we say that MySQL has a client-server architecture?
+
+A: It means that the whole data is stored into a server and you have many kind of clients that access the data. The client can have access to reading and writting or read-only access. Some common clients: sequelpro, mysql, sqllite, etc.
 
 2. Use the monitor help to look up information on the SELECT statement. (We’ll discuss SELECT in detail in Chapter 5.)
+If you are trying to calculate stats, looking under a specific view, or even grabbing some data under some criteria, than you should use the select statement. It's going to help select a part of the whole database for your need.
 
 3. What is the difference between using the monitor in interactive mode and using
 the monitor in batch mode?
+The monitor in interative mode you past your query/command/list of command in the command line.
+The batch mode you load/run queries stored in a file.
 
 4. What do the monitor user, password, and database options do?
+To access a server you need to specify a user and the password is optional, but even for no set password, your must leave the field empty $mysql --user = abacate --password.
+If you are the only user, than you may have a password, and you have access for everthing in the server (delete, write, select, update, etc), otherwise, the access is setting up in a user table in the server.
+This user and password has no relation to the user that the application is running under (on linux and mac os application runs under a user) or your computer username.
+If you set it up a user, you can choose whatever the acces that this user is going to have in your server.
 
+Database option helps you on don't have to type the database name everytime that you run a command/list of command.
+I prefer don't use this option because I'm used to using join all the time, so in this case I fell confortable writting down the name of db every time that I run a query to make sure that I'm running the right way.
