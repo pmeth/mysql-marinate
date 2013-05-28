@@ -3,16 +3,27 @@ Homework for Chapter 2 of Learning MySQL (2006 edition), from p. 94:
 Exercises:
 1) What is command completion?
 
+Command completion is a feature on command line that allows you to start the name of a command/file/directory and with some key command (it changes, but usually "tab", ctrl + d, ctrl +f)
+
 2) What are the relative advantages of installing MySQL using the package,
  directory archive (tarball or "no-install", or compiled methods?
+The benefits of install MySQL using the integrated package are that we get all the files that you need, it allows you to follow step by step on the installation wizard, and many of the packages include others tools that adjust configuration files. On the her hand many of these packages might not be updated so can be missing some php libraries for examples. Another disadvantage is that an integrated package might not fit your current setup; for example, even if you already have a mysql installation, you're get another one as part of the integrated , and you'll have to take caro to avoid clashes.
 
 3) How do you verify the integrity of downloaded packages?
+A way to verify the integrity of you package, as the book says, is using md5. The package checksum is codified into a hash file to check if anybody changed anything of the package. The checksum is unique and it's impossible change the package without change the checksum.
 
 4) How do you add the MySQL bin directory to the operating system path?
+If you installed the mysql in a nonstandard directory, you should open/create the profile file on mac-os, or bath.sh on linux and add the path of your mysql installation: export path = \mysqldirectory\: $path, you also can add the password for server tho save you to type everytime that you run something into sql: 
+$\mysql\bin\mysqld_safe\  
+	--port=
+	--socket=~/path/mysql.sock\
+	--user=root\
+	password ""
+	On Windows OS you should click with right button on computer icone, properties, Advanced Systems settings. A windows is going to be opened, so click on environmental variables icone, and add find in the down menu (System variables) the path variable, click on edit and add your mysql path into there (use ; to separe from the others path)
 
 Additional Exercises (not in the book): 
 1) Document how you installed MySQL and any issues you came across with installation. 
- (The goal is to be easy to install it again on a similar machine.)
+I use windows 7, so I went to http://dev.mysql.com/downloads/tools/workbench/ I downloaded the .exe and installed. I have the wamp installed on my computer, which means that I do have a server to connect. So I created a new connection using the default parameters, and that's it.
 
 2) Document where important files should be.
 

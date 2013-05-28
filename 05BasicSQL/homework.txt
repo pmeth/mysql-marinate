@@ -21,8 +21,17 @@ in the WHERE clause, it's possible to forget some of the join clauses
 in the WHERE. If you put the join clauses in the JOIN part, it's way more readable.
 
 1) Use one or more SELECT statements to find out how many tracks are on New Order's Brotherhood album.
+85 and the queries are in the additional file.
 
 2) Using a join, list the albums that we own by the band New Order
+
+'New Order', 'Retro - John McCready FAN'
+'New Order', 'Substance (Disc 2)'
+'New Order', 'Retro - Miranda Sawyer POP'
+'New Order', 'Retro - New Order / Bobby Gillespie LIVE'
+'New Order', 'Power, Corruption & Lies'
+'New Order', 'Substance 1987 (Disc 1)'
+'New Order', 'Brotherhood'
 
 3) With INSERT statements, add the artist Leftfield to the database. 
 For this new artist, add the album "Leftism" that has the following tracks:

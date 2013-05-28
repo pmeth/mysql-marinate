@@ -1,8 +1,9 @@
-1. When would you use a weak entity?
+﻿1. When would you use a weak entity?
 
+When we have a table that for their can not be indentify. For example, let's get the media store in the question number 4. We have the dvd media characteristics stored into a  table with the respective price and you know that a customer bought the album xx, artist yy, studio zz. But you don't know the price, how connect to the dvd media table and get the price? only concat, or combining these information and forming a primary key.
 
 2. Is it better to use entities instead of attributes?
-
+For me it's always better, unless that you have all information in only one table ( like facts table). Otherwise entities allow you to have a primary key, wich means that your queries will run faster because they can find theirselves into the db. Sometimes you don't have the choice so just use attributes and use combinations of fields to create the primary key.
 
 3. Alter and extend the music database ER model so that it can store 
 compilations, where a compilation is an album that contains tracks by two 
