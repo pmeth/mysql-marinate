@@ -22,7 +22,11 @@ in the WHERE. If you put the join clauses in the JOIN part, it's way more readab
 
 1) Use one or more SELECT statements to find out how many tracks are on New Order's Brotherhood album.
 
+select count(*) from album inner join track on (album.artist_id = track.artist_id and album.album_id = track.album_id) where track.artist_id = 1 and track.album_id = 7
+
 2) Using a join, list the albums that we own by the band New Order
+
+select album_name from album inner join artist on album.artist_id = artist.artist_id where artist_name = "New Order"
 
 3) With INSERT statements, add the artist Leftfield to the database. 
 For this new artist, add the album "Leftism" that has the following tracks:
@@ -41,9 +45,21 @@ l. Bonus Track (Time: 1.22)
 
 The answer to this question should be the INSERT statement(s).
 
+insert into artist values (7, "Leftfield")
+
+insert into album (7, 8, "Leftism")
+
+insert into track values (0, "Release The Pressure", 7, 8, 7.39), (1, "Afro-Melt", 7, 8, 7.33), (2, "Melt", 7, 8, 5.21), (3, "Song Of Life", 7, 8, 6.55), (4, "Original", 7, 8, 6.00), (5, "Black Flute", 7, 8, 6.55), (6, "Space Shanty", 7, 8, 7.15), (7, "Inspection Check One", 7, 8, 6.30), (8, "Storm 3000", 7, 8, 5.44), (9, "Open Up", 7, 8, 6.52), (10, "21st Century Poem", 7, 8, 5.42), (11, "Bonus Track", 7, 8, 1.22)
+
 4) How long in minutes is the Leftism album you added in Question 3? Hint: use the
 SUM() aggregate function.
 
+select sum(time) from track where artist_id = 7 and album_id = 8
+
 5) Change the time for the Original track on the Leftism album to 6.22.
 
-6) Remove the 'Bonus Track' from the Leftism album,
+update track set time = 6.22 where track_name = "Original"
+
+6) Remove the 'Bonus Track' from the Leftism album
+
+delete from track where track_name = "Bonus Track"

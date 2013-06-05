@@ -1,8 +1,10 @@
 1. When would you use a weak entity?
 
+A weak entity is used when it does not have its own identifying ID, this is information that relies on data from another table.
 
 2. Is it better to use entities instead of attributes?
 
+Entities and attributes are used differently depending on the information to be stored. An entity will be typically be a piece of information that is of direct interest and attributes then added to help describe that entity. If, however, that attribute has its own supporting components then it may be better to create an entity for it.
 
 3. Alter and extend the music database ER model so that it can store 
 compilations, where a compilation is an album that contains tracks by two 
