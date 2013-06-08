@@ -76,7 +76,7 @@ SELECT A.artist_id, A.album_id, T1.track_name, T1.time FROM album AS A
 JOIN track as T1 ON A.artist_id=T1.artist_id AND A.album_id=T1.album_id
 WHERE T1.time=(SELECT MAX(T2.time) FROM track AS T2 WHERE 
 T1.artist_id=T2.artist_id AND T1.album_id=T2.album_id);  
-
+ 
 
 
 5) What is the difference between an INNER JOIN, a LEFT JOIN, and a RIGHT
