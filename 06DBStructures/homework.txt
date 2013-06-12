@@ -1,32 +1,183 @@
-Chapter 6 Homework
+﻿Chapter 6 Homework
 
 All exercises here concern the music database. 
 
-1. You’ve decided to store more information about artists and albums. Specifically,
-for artists, you want to store the names of people who have worked with the artist
-(for example, vocalists, guitarists, trumpeters, and drummers), when they began
-working with the artist, and when they stopped working with the artist (if they
-have done so).
+1 (a) You’ve decided to store more information about artists and albums.
+      Specifically, for artists, you want to store the names of people who
+      have worked with the artist (for example, vocalists, guitarists,
+      trumpeters, and drummers), when they began working with the artist,
+      and when they stopped working with the artist (if they have done so):
 
-For albums, you want to store the name of the album producer, when the album
-was released, and where the album was recorded. Design tables or columns that
-can store this information, and explain the advantages and disadvantages of your
-design. Choose the column types you need, explaining the advantages and disad-
-vantages of your choices.
+      create table sideman (
+        artist_id SMALLINT(5) NOT NULL DEFAULT 0,
+        sideman_id SMALLINT(5) NOT NULL DEFAULT 0,
+        sideman_name CHAR(128) DEFAULT NULL,
+        sideman_role CHAR(128) DEFAULT NULL,
+        started_working DATE NOT NULL DEFAULT 0,
+        stopped_working DATE NOT NULL DEFAULT 0,
+        PRIMARY KEY (artist_id,sideman_id)
+      );
 
-2. There are five types for storing temporal data: DATETIME, DATE, TIME, YEAR, and
-TIMESTAMP. Explain what each is used for, and give an example of a situation in
-which you would choose to use it. Note that http://palominodb.com/blog/2011/05/23/datetime-vs-timestamp
-has some useful information too.
+      For each one artist, there are N possible sidemen (male or female).
 
-3. You’ve decided to use the AUTO_INCREMENT feature. List the three requirements that
-must be met by the column you’re applying it to.
+      As a result, a sideman table should be created, which includes the
+      following information:
+
+      - name of the sideman
+      - their role (vocalist, guitarist, drummer, ...)
+      - when they started working with the artist
+      - when they stopped working with the artist
+
+      The above "create table" statement creates a table with those columns
+      and more:
+
+      - artist_id - small integer (SMALLINT) which identifies the artist that
+                    this sideman worked with. The column type is the same as
+                    the artist_id column in the artist table for table indexing
+                    purposes.
+      - sideman_id - small integer (SMALLINT) which uniquely identifies the
+                     sideman. Value of the column is 0-65535, suffient to
+                     identify an individual sideman
+      - sideman_name - first and last name of the side man. 128 bytes is large
+                       enough to identify them using "FirstName LastName" and
+                       small enough to allow mysql server to efficiently skip
+                       over table rows.
+      - sideman_role - what role the sideman performs. 128 bytes is large
+                       enough to specify their role and small enough to allow
+                       mysql server to efficiently skip over table rows.
+      - started_working - date the sideman started working with the artist in
+                          YYYY-MM-DD format. Summarizes desired information.
+      - stopped_working - date the sideman stopped working with the artist in
+                          YYYY-MM_DD format. Summarizes desired information.
+
+      The primary key for the table is a composite of the "artist_id" and
+      "sideman_id" columns.
+
+      The primary disadvantage of adding and populating the table is that
+      it will increase the size of the database.
+
+      It's primary advantage is that it succinctly specifies the desired
+      sideman information in minimal database size and used disk space.
+
+  (b) For albums, you want to store the name of the album producer, when the
+      album was released, and where the album was recorded. Design tables or
+      columns that can store this information, and explain the advantages and
+      disadvantages of your design. Choose the column types you need,
+      explaining the advantages and disadvantages of your choices.
+
+      In order to store the name of the album producer, when the album was
+      released and where it was recorded, it is best to add that information
+      to the existing album table.
+
+      This can be done by appending the following columns to the table:
+
+      - producer_name CHAR(128) DEFAULT NULL
+      - release_date DATE DEFAULT 0
+      - recorded_site CHAR(128) DEFAULT NULL
+ 
+      or dropping and recreating the table with those columns:
+
+      create table album (
+        artist_id SMALLINT(5) NOT NULL DEFAULT 0,
+        album_id SMALLINT(4) NOT NULL DEFAULT 0,
+        album_name CHAR(128) DEFAULT NULL,
+        producer_name CHAR(128) DEFAULT NULL,
+        release_date DATE DEFAULT 0,
+        recorded_site CHAR(128) DEFAULT NULL,
+        PRIMARY KEY  (artist_id,album_id)
+      );
+
+      The 128 byte producer_name column is large enough to contain the
+      "FirstName LastName" of the producer.
+
+      The release date summarizes the albums release date in YYYY-MM-DD format,
+      which is what we want.
+
+      The 128 byte recorded site (where the album was recorded) column is large
+      enough to contain the name of the studio or town/city where the album was
+      recorded.
+
+      The primary disadvantage of adding these columns to the album table is
+      that it will increase the size of the database.
+
+      But the inclusion of these columns commits data that may be valuable to
+      the end user.
+      
+2. There are five types for storing temporal data: DATETIME, DATE, TIME, YEAR,
+   and TIMESTAMP. Explain what each is used for, and give an example of a
+   situation in which you would choose to use it. Note that
+   http://palominodb.com/blog/2011/05/23/datetime-vs-timestamp has some useful
+   information too.
+
+   DATETIME - Stores and displays a date and time in the format "YYYY-MM-DD
+              HH:MM:SS" for the range 1000-01-01 00:00:00 to 9999-12-31
+              23:59:59. It can be input to a mysql table in multiple forms,
+              but is stored internally as YYYY-MM-DD HH:MM:SS.
+
+              Such a column in a mysql table row would be useful for tracking
+              the delivery of parcel or package.
+
+   DATE - Stores and displays a date in the format YYYY-MM-DD for the range
+          1000-01-01 to 9999-12-31. Dates must always be input as year, month,
+          and day triples, but the format of the input can vary.
+
+          Such a column in a mysql table row would be useful for tracking the
+          date when a person was born and when they died.
+
+   TIME - Stores a time in the format HHH:MM:SS for the range -838:59:59 to
+          838:59:59. Times must always be input in the order days, hours,
+          minutes, and seconds, using the following formats:
+
+          DD HH:MM:SS, HH:MM:SS, DD HH:MM, HH:MM, DD HH, or SS
+
+          Such a column in a mysql table row would be useful for tracking the
+          time to complete a run.
+
+   YEAR - Stores the year in two-digit or four-digit format.
+
+          Such a column in a mysql table row would be useful for tracking the
+          year a car was manufactured.
+
+   TIMESTAMP - Stores and displays a date and time pair in the format
+               "YYYY-MM-DD HH:MM:SS" for the range 1970-01-01 00:00:00 to
+               sometime in 2037.
+
+               This column type is similar to DATETIME, but provides an auto-
+               update to the current date functionality, which is useful.
+
+               Because of this auto-update functionality, this column type is
+               useful in any situation when you wish to record the time when
+               another element in the table row is added or updated.
+
+               For example, when the status of a flight has changed.
+
+3. You’ve decided to use the AUTO_INCREMENT feature. List the three
+   requirements that must be met by the column you’re applying it to.
+
+   The AUTO_INCREMENT feature has the following requirements:
+
+   o The column it is used on must be indexed.
+   o The column that is it used on cannot have a DEFAULT value.
+   o There can be only one AUTO_INCREMENT column per table.
 
 4. Why can only one column in a table have the AUTO_INCREMENT feature?
 
+   MySQL’s proprietary AUTO_INCREMENT feature allows you to create a unique
+   identifier for a table row.
+
+   Consequently, if a table had two (or more) table indexes with the
+   AUTO_INCREMENT feature, it may no longer have a unique value to identify
+   each row.
+
 5. Using the monitor, create a table with the following statement:
-mysql> CREATE TABLE exercise (field1 INT(3));
-Using the ALTER TABLE statement, make field1 the primary key, carrying out any
-additional steps you need to make this possible. Add a second column, field2, of
-type CHAR(64) with a DEFAULT 5 clause. Create an index on a prefix of 10 characters
-from field2.
+
+   mysql> CREATE TABLE exercise (field1 INT(3));
+
+   Using the ALTER TABLE statement, make field1 the primary key, carrying out any
+   additional steps you need to make this possible. Add a second column, field2, of
+   type CHAR(64) with a DEFAULT 5 clause. Create an index on a prefix of 10 characters
+   from field2.
+
+   ALTER TABLE exercise ADD PRIMARY KEY (field1);
+   ALTER TABLE exercise ADD field2 CHAR(64) DEFAULT 5;
+   ALTER TABLE exercise ADD INDEX (field2(10));
