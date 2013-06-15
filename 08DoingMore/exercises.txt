@@ -1,12 +1,40 @@
-Exercises for Chapter 8
+﻿Exercises for Chapter 8
 
 1) Write the monitor command to import the file academics.tsv, 
 which has its values separated by tabs, into the details table.
  Hint: the tab character is shown with the \t escape sequence.
 
+ANSWER:
+
+CREATE DATABASE academics;
+USE academics;
+CREATE TABLE details (
+surname CHAR(40),
+given_names CHAR(40),
+-- used 60 characters because some institutions in dataset have more than 40 characters
+institution CHAR(60) 
+);
+LOAD DATA LOCAL INFILE 'C:\\mysql\\academics.tsv'
+INTO TABLE details FIELDS TERMINATED BY '\t';
+
+
 2) When would you need to insert data using a query?
 
+ANSWER:
+
+When we want to add additional records into a database from other sources accessible via a SELECT statement.
+
+
 3) What’s the difference between REPLACE and INSERT IGNORE?
+
+
+ANSWER:
+
+
+With REPLACE if a primary key already exists in the table then the record is deleted and a new record with the same primary key is inserted.
+
+With INSERT IGNORE is a primary key already exists in the table then there is no change made to the table (the record to be inserted is IGNORED)
+
 
 4) What can you tell from this output produced by the EXPLAIN command?
 
@@ -25,6 +53,15 @@ which has its values separated by tabs, into the details table.
     ... |      12 | NULL  |  570 | Using where; Using index; Distinct |
     ... +---------+-------+------+------------------------------------+
     3 rows in set (0.00 sec)
+
+ANSWER:
+
+Not using UNION or subqueries
+The supervisor table is being handled efficiently, there is probably a WHERE statement pointing to the Primary Key and so the desired record is retrieved directly.
+The student table has no indexes and as a result a full table scan is required (inefficient, should look to create a suitable index)
+The supervises table is benefitting from a covered index, the where statement can be satisfied by looking at the table index only and does not have to retrieve that table records. There are many records that match the WHERE criteria.
+
+
 
 5) What can you tell from this output produced by the EXPLAIN command?
 
@@ -56,5 +93,13 @@ which has its values separated by tabs, into the details table.
     ...|                             |
     ...+-----------------------------+
     5 rows in set (0.01 sec)
+
+ANSWER:
+
+There are multiple selects which are being consolidated with a UNION
+The played and track tables are being joined in an equi-join using the artist_id, album_id and track_id fields
+Both the played and track tables are indexed and the indexes are being used
+There is a filesort which is likely needed to support an ORDER BY clause
+It's not clear that there are any problems with this query
 
 
