@@ -1,9 +1,113 @@
-1. What do we mean when we say that MySQL has a client-server architecture?
+﻿1. What do we mean when we say that MySQL has a client-server architecture?
+
+The client and the server are separate processes that can run on the same or separate machines. The client connects to the server and makes requests of the server. The server provides responses to the client.The server can service requests coming from a set of authorized clients.
+
 
 2. Use the monitor help to look up information on the SELECT statement. (We’ll discuss SELECT in detail in Chapter 5.)
+
+
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\Users\tedh>mysql --user=root --password=not real password
+Warning: Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.6.11-log MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> help select
+Name: 'SELECT'
+Description:
+Syntax:
+SELECT
+    [ALL | DISTINCT | DISTINCTROW ]
+      [HIGH_PRIORITY]
+      [STRAIGHT_JOIN]
+      [SQL_SMALL_RESULT] [SQL_BIG_RESULT] [SQL_BUFFER_RESULT]
+      [SQL_CACHE | SQL_NO_CACHE] [SQL_CALC_FOUND_ROWS]
+    select_expr [, select_expr ...]
+    [FROM table_references
+      [PARTITION partition_list]
+    [WHERE where_condition]
+    [GROUP BY {col_name | expr | position}
+      [ASC | DESC], ... [WITH ROLLUP]]
+    [HAVING where_condition]
+    [ORDER BY {col_name | expr | position}
+      [ASC | DESC], ...]
+    [LIMIT {[offset,] row_count | row_count OFFSET offset}]
+    [PROCEDURE procedure_name(argument_list)]
+    [INTO OUTFILE 'file_name'
+        [CHARACTER SET charset_name]
+        export_options
+      | INTO DUMPFILE 'file_name'
+      | INTO var_name [, var_name]]
+    [FOR UPDATE | LOCK IN SHARE MODE]]
+
+SELECT is used to retrieve rows selected from one or more tables, and
+can include UNION statements and subqueries. See [HELP UNION], and
+http://dev.mysql.com/doc/refman/5.6/en/subqueries.html.
+
+The most commonly used clauses of SELECT statements are these:
+
+o Each select_expr indicates a column that you want to retrieve. There
+  must be at least one select_expr.
+
+o table_references indicates the table or tables from which to retrieve
+  rows. Its syntax is described in [HELP JOIN].
+
+o Starting in MySQL 5.6.2, SELECT supports explicit partition selection
+  using the PARTITION keyword with a list of partitions or
+  subpartitions (or both) following the name of the table in a
+  table_reference (see [HELP JOIN]). In this case, rows are selected
+  only from the partitions listed, and any other partitions of the
+  table are ignored. For more information and examples, see
+  http://dev.mysql.com/doc/refman/5.6/en/partitioning-selection.html.
+
+  In MySQL 5.6.6 and later, SELECT ... PARTITION from tables using
+  storage engines such as MyISAM that perform table-level locks (and
+  thus partition locks) lock only the partitions or subpartitions named
+  by the PARTITION option.
+
+  See
+  http://dev.mysql.com/doc/refman/5.6/en/partitioning-limitations-locki
+  ng.html, for more information.
+
+o The WHERE clause, if given, indicates the condition or conditions
+  that rows must satisfy to be selected. where_condition is an
+  expression that evaluates to true for each row to be selected. The
+  statement selects all rows if there is no WHERE clause.
+
+  In the WHERE expression, you can use any of the functions and
+  operators that MySQL supports, except for aggregate (summary)
+  functions. See
+  http://dev.mysql.com/doc/refman/5.6/en/expressions.html, and
+  http://dev.mysql.com/doc/refman/5.6/en/functions.html.
+
+SELECT can also be used to retrieve rows computed without reference to
+any table.
+
+URL: http://dev.mysql.com/doc/refman/5.6/en/select.html
+
+
+mysql>
 
 3. What is the difference between using the monitor in interactive mode and using
 the monitor in batch mode?
 
+In interactive mode you key in SQL Queries or MySQL Commands one by one and get results.
+In batch mode the monitor reads in a list of commands from a text file which it then executes.
+
+
 4. What do the monitor user, password, and database options do?
+
+The monitor user, password and database options are used to authenticate the user and to verity
+that the user is authorized to carry out the request on the target database.
 

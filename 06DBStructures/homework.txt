@@ -1,4 +1,4 @@
-Chapter 6 Homework
+﻿Chapter 6 Homework
 
 All exercises here concern the music database. 
 
@@ -14,15 +14,72 @@ can store this information, and explain the advantages and disadvantages of your
 design. Choose the column types you need, explaining the advantages and disad-
 vantages of your choices.
 
+ANSWER:
+CREATE TABLE co_artist(
+co_artist_id INT(5) NOT NULL AUTO_INCREMENT,
+artist_id INT(5) NOT NULL,
+co_artist_name CHAR(128),
+collaboration_type CHAR(64),
+start_date DATE NOT NULL,
+end_date DATE NULL,
+PRIMARY KEY(co_artist_id),
+INDEX artist_coartist (artist_id,co_artist_id)
+);
+
+ALTER TABLE album 
+ADD album_producer CHAR(128) NULL, 
+ADD release_date DATE NULL,
+ADD recording_location CHAR(64);
+
+Considerations:
+a) I would have preferred for the co_artists table to have had a primary key consisting of (artist_id, co_artist_id) but this is not permitted for INNODB type tables. I decided to keep the INNODB table type because this is consistent with all other tables. As a result I made the co_artist_id auto incrementing field the primary key and created an additional index consisting of (artist_id, co_artist_id). This enables fast searches for all co-artists who have worked with an artist.
+
+The relationship between the artist and co_artist tables is one-to-many. This does not capture relationships between co-workers who work with each other. Whether this is sufficient depends on the requirements.
+
+b) The added CHAR fields are dimensioned for consistency with the already existing fields. If many of the data values were expected to be NULL or have few characters then consideration should be given to using a VARCHAR instead. CHAR has the advantage of speed at the expense of requiring additional disk space.
+
+c) The start_date and end_date fields were defined as DATE fields. Only the date is required and not the time of day, so using a DATETIME field would be overkill.
+---------------------------------------------
+
 2. There are five types for storing temporal data: DATETIME, DATE, TIME, YEAR, and
 TIMESTAMP. Explain what each is used for, and give an example of a situation in
 which you would choose to use it. Note that http://palominodb.com/blog/2011/05/23/datetime-vs-timestamp
 has some useful information too.
 
+ANSWER:
+DATETIME - Quote from MySQL Reference "The DATETIME type is used for values that contain both date and time parts. MySQL retrieves and displays DATETIME values in 'YYYY-MM-DD HH:MM:SS' format. The supported range is '1000-01-01 00:00:00' to '9999-12-31 23:59:59'." DATETIME will always return the original text version of the date (TIMESTAMP might return a different value based on the local time zone in use).
+Example of suitable use would be where the DATETIME field will be used as part of a key and where we don't want the value to change.
+
+DATE - Quote from MySQL Reference "The DATE type is used for values with a date part but no time part. MySQL retrieves and displays DATE values in 'YYYY-MM-DD' format. The supported range is '1000-01-01' to '9999-12-31'.". Suitable usage would be for "Date of Birth"
+
+TIME - Quote from MySQL Reference "MySQL retrieves and displays TIME values in 'HH:MM:SS' format (or 'HHH:MM:SS' format for large hours values). TIME values may range from '-838:59:59' to '838:59:59'. The hours part may be so large because the TIME type can be used not only to represent a time of day (which must be less than 24 hours), but also elapsed time or a time interval between two events (which may be much greater than 24 hours, or even negative)."
+Good use would we where tracking elapsed time rather than time of day.
+
+YEAR - Quote from MySQL Reference "The YEAR type is a 1-byte type used to represent year values."
+Use YEAR type when the year is required and nothing else.
+
+TIMESTAMP - Quote from MySQL Reference "The TIMESTAMP data type is used for values that contain both date and time parts. TIMESTAMP has a range of '1970-01-01 00:00:01' UTC to '2038-01-19 03:14:07' UTC....The TIMESTAMP data type offers automatic initialization and updating to the current date and time....MySQL converts TIMESTAMP values from the current time zone to UTC for storage...If you store a TIMESTAMP value, and then change the time zone and retrieve the value, the retrieved value is different from the value you stored."
+TIMESTAMP should be used when the automatic initialization and updating of the current date and time features are an asset and we don't care about any effects of changing the server time zone. Also useful where the application is used across time zones and individuals want to see the same instant of time adjusted for the local time zone. TIMESTAMP is more space efficient than DATETIME.
+---------------------------------------------
+
 3. You’ve decided to use the AUTO_INCREMENT feature. List the three requirements that
 must be met by the column you’re applying it to.
 
+ANSWER:
+a) The column it is used on must be indexed
+b) The column it is used on cannot have a DEFAULT value
+c) There can be only one AUTO_INCREMENT column per table
+---------------------------------------------
+
 4. Why can only one column in a table have the AUTO_INCREMENT feature?
+
+ANSWER:
+If multiple AUTO_INCREMENT fields were permitted per table then this would require a lot more infrastructure to support LAST_INSERT_ID() because now it would have to return a set of INSERT_IDs. Additionally one of the AUTO_INCREMENT columns could potentially be updated only on inserts while another would be updated on both inserts and updates adding further complications. 
+
+On the other hand this was a design choice in implementing MYSQL and probably multiple AUTO_INCREMENTs could have been provided if this was considered to be an important feature. 
+
+The AUTO_INCREMENT provides an artificial (non-significant) unique value most often used to be used as a key to the record and from this point of view a 2nd AUTO_INCREMENT field would be redundant.
+---------------------------------------------
 
 5. Using the monitor, create a table with the following statement:
 mysql> CREATE TABLE exercise (field1 INT(3));
@@ -30,3 +87,10 @@ Using the ALTER TABLE statement, make field1 the primary key, carrying out any
 additional steps you need to make this possible. Add a second column, field2, of
 type CHAR(64) with a DEFAULT 5 clause. Create an index on a prefix of 10 characters
 from field2.
+
+ANSWER:
+ALTER TABLE exercise 
+ADD PRIMARY KEY (field1),
+ADD field2 CHAR(64) DEFAULT 5,
+ADD INDEX key_field2 (field2(10));
+

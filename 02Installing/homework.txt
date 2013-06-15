@@ -3,17 +3,83 @@ Homework for Chapter 2 of Learning MySQL (2006 edition), from p. 94:
 Exercises:
 1) What is command completion?
 
+"Command completion is a feature that can save you a lot of typing. When you start to type the anme of a command, file, or directory, pressing the completion key sequence cycles through matches."
+
+
 2) What are the relative advantages of installing MySQL using the package,
  directory archive (tarball or "no-install", or compiled methods?
 
+Relative Advantages:
+
+	Package:
+		- integrated packages commonly include all required software
+		  (Apache, PHP, Perl, tools, etc.)
+		- easier than integrating stand-alone packages
+		- includes installation wizard
+		- requires least knowledge
+		- may be a couple of minor releases behind the current version
+		- may not fit with current setup (eg. some of the components may
+		  already be installed in the environment and this may lead to
+		  duplicated components, or conflicts)
+
+
+	Directory archive (tarball or "no-install":
+		- slightly more complicated than installing via a package
+		- does not require an installation program
+		- is a ready to use collection of all required files correctly placed 
+		  within a directory structure (the tarball archive just needs to be unpacked into 		  	  	  the destination location as required)
+
+
+	Compiled methods:
+
+		- Ensures most up-to-date version of the software
+		- provides the greatest control over optimization 
+		  (performance increase potentially up to 30%)
+		- tedious and error-prone process
+		- requires more knowledge
+
+
+
 3) How do you verify the integrity of downloaded packages?
 
+	Can use checksums (MD5 is frequently used)
+	1) Download the package
+	2) Run a tool against the downloaded package to calculate the MD5 checksum
+	3) Compare the calculated MD5 checksum against the checksum provided with
+	   the package distributor.
+
 4) How do you add the MySQL bin directory to the operating system path?
+
+	Under Windows 7:
+	Type "Environment Variables" in the run line and hit Enter
+	Edit the Path variable
+	Add "C:\Program Files\MySQL\MySQL Server 5.6\bin\;" to the Path
+
+
 
 Additional Exercises (not in the book): 
 1) Document how you installed MySQL and any issues you came across with installation. 
  (The goal is to be easy to install it again on a similar machine.)
 
+	Installed the MySQL Community Server on my local machine (Windows 7)
+	http://dev.mysql.com/downloads/
+	Selected "MySQL Community Server 5.6.11"
+	Selected platform "Microsoft Windows"
+	Downloaded MySQL Installer 5.6 for Windows
+	Signed up for an Oracle Web Account
+	MD5: 3652992236d9680aca439e4f4c77a4e3
+	Checked MD5 using www.nullriver.com/winmd5sum
+	Ran mysql-installer-community-5.6.11.0.msi (right click and select "Install")
+	Respond "Yes" to allow program to make changes
+	Select "Install Updates"
+	Click the "Execute" button
+	Changed the root user password using mysqladmin
+
 2) Document where important files should be.
+
+	C:\Program Files\MySQL\MySQL Server 5.6\bin
+	MySql
+	MySqlAdmin
+
 
 Do not forget to do a pull request when your homework is complete.

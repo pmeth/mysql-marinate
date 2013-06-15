@@ -8,17 +8,93 @@ For these exercises, use the "music" database.
 1) Write a JOIN query that displays the name of each artist and the albums
 they've made. Alongside the album, display the number of tracks on the album.
 
+ANSWER:
+SELECT AR.artist_name AS artist, AL.album_name AS album, COUNT(T.track_id) number_of_tracks FROM
+artist AR JOIN album AL
+on AR.artist_id = AL.artist_id
+JOIN track T
+ON AR.artist_id=T.artist_id AND AL.album_id=T.album_id
+GROUP BY artist, album
+order by artist,album;
+
 2) Repeat Question 1, but now display only those albums that have more
 than 10 tracks
 
+ANSWER:
+SELECT AR.artist_name AS artist, AL.album_name AS album, COUNT(T.track_id) number_of_tracks FROM
+artist AR JOIN album AL
+on AR.artist_id = AL.artist_id
+JOIN track T
+ON AR.artist_id=T.artist_id AND AL.album_id=T.album_id
+GROUP BY artist, album
+HAVING number_of_tracks > 10
+order by artist,album;
+
 3) Repeat Question 1, but write it as a nested query.
+
+ANSWER:
+
+SELECT 
+(SELECT artist_name FROM artist AS A WHERE A.artist_id=AL.artist_id ) AS Artist, 
+AL.album_name AS Album, 
+(SELECT COUNT(T.track_id) AS number_of_tracks FROM track AS T 
+WHERE T.artist_id = AL.artist_id AND T.album_id=AL.album_id) AS "# of Tracks"
+FROM album AS AL
+order by artist,album;
 
 4) What are the four types of nested queries? For each type, write a sample
 query on the music database. Try to use different keywords in each query,
 selecting from ANY, ALL, EXISTS (or NOT EXISTS) and IN (or NOT IN).
 
+ANSWER:
+
+a) scalar subquery 
+
+--List the track names with play time longer that average 
+SELECT track_name FROM track
+WHERE time > (select AVG(time) FROM track);
+
+
+b) column subquery
+
+--List the artists who have had music played
+SELECT artist_name FROM artist
+where artist_id IN (SELECT artist_id FROM played);
+
+c) row subquery
+
+--Names of Albums which have not been played
+SELECT A.album_name FROM album AS A 
+WHERE (A.artist_id,A.album_id) NOT IN
+(SELECT artist_id,album_id FROM played);
+
+
+d) correlated subquery
+
+-- List the longest track on each album
+SELECT A.artist_id, A.album_id, T1.track_name, T1.time FROM album AS A
+JOIN track as T1 ON A.artist_id=T1.artist_id AND A.album_id=T1.album_id
+WHERE T1.time=(SELECT MAX(T2.time) FROM track AS T2 WHERE 
+T1.artist_id=T2.artist_id AND T1.album_id=T2.album_id);  
+ 
+
+
 5) What is the difference between an INNER JOIN, a LEFT JOIN, and a RIGHT
 JOIN? Does the the order of tables matter in an INNER JOIN? Why or why not?
+
+ANSWER:
+
+Inner Join only includes records that match between the left and right tables
+
+Left Join will include all records from the left table (if there is no matching record in the right table then the right table fields will all have a value of NULL)
+
+Right Join will include all records from the right table (if there is no matching record in the left table then the left table fields will all have a value of NULL)
+
+The order of tables does not matter with an inner join because the same rows will be returned 
+regardless of the table order (only records that match between the left and right tables will be
+returned)
+
+
 
 6) Why do these queries give different results? What does this tell you
 about using join conditions in the ON clause versus in the WHERE clause
@@ -37,3 +113,13 @@ LEFT JOIN played ON (track.album_id=played.album_id)
 WHERE track.track_id=played.track_id
 AND track.artist_id=3
 GROUP BY track_name, track.album_id;
+
+Left Joins are performed in three logical processes: 
+(1) cartesian product of left and right tables
+(2) filtering of resultant records based on the ON conditions
+(3) missing records from the Left or Right side (preserved side) are added back into the resultant set
+
+(1)-(3) are performed as part of the FROM clause processing
+A WHERE clause is performed separtately after (3)
+
+A  Outer join guarantees that all records in the preserved table will be represented in the resultant set of records following the FROM clause processing. A WHERE clause could result in some of these records being filtered from the FROM result set. As a result there may be fewer records returned when predicates are included in WHERE clauses versus the same predicates included in the Outer JoIN conditions.
