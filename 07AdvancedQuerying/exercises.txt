@@ -8,17 +8,94 @@ For these exercises, use the "music" database.
 1) Write a JOIN query that displays the name of each artist and the albums
 they've made. Alongside the album, display the number of tracks on the album.
 
+   SELECT artist_name,album_name,COUNT(*) FROM artist
+          INNER JOIN album USING (artist_id)
+          INNER JOIN track USING (artist_id, album_id)
+          GROUP BY album.artist_id,album.album_id;
+
 2) Repeat Question 1, but now display only those albums that have more
 than 10 tracks
 
+   SELECT artist_name,album_name,COUNT(*) FROM artist
+       INNER JOIN album USING (artist_id)
+       INNER JOIN track USING (artist_id, album_id)
+       GROUP BY album.artist_id,album.album_id
+       HAVING COUNT(*) > 10;
+
 3) Repeat Question 1, but write it as a nested query.
+
+   SELECT artist_name, album_name, COUNT(*) FROM 
+       (SELECT artist_id, album_id, artist_name, album_name FROM artist
+        INNER JOIN album USING (artist_id)
+        INNER JOIN track USING (artist_id, album_id)) AS a
+        GROUP BY artist_id, album_id;
 
 4) What are the four types of nested queries? For each type, write a sample
 query on the music database. Try to use different keywords in each query,
 selecting from ANY, ALL, EXISTS (or NOT EXISTS) and IN (or NOT IN).
 
+   The four types are:
+
+   1. ANY (or SOME)
+
+      o List all albums by any artist whose name begins with "The":
+
+        SELECT album_name FROM album WHERE artist_id = ANY
+            (SELECT artist_id FROM artist WHERE artist_name LIKE "The%");
+
+   2. ALL
+
+      o List all albums by artists whose name does not begin with "The",
+        in alphabetical order:
+
+        SELECT album_name FROM album WHERE artist_id != ALL
+            (SELECT artist_id FROM artist WHERE artist_name LIKE 'the%')
+            GROUP BY album_name;
+
+   3. EXISTS
+
+      o If there is any data in the artist table, display the name of all
+        albums in alphabetical order:
+
+        SELECT album_name FROM album WHERE EXISTS
+            (SELECT * FROM artist) GROUP BY album_name;
+
+   4. IN
+
+      o List all albums by any artist whose name begins with "The":
+
+        SELECT album_name FROM
+            artist INNER JOIN album USING (artist_id) WHERE artist_name IN
+            (SELECT artist_name FROM artist WHERE artist_name LIKE "The%")
+            GROUP BY album_name;
+
+
 5) What is the difference between an INNER JOIN, a LEFT JOIN, and a RIGHT
 JOIN? Does the the order of tables matter in an INNER JOIN? Why or why not?
+
+   The syntax of an INNER JOIN is "table1 INNER JOIN table2".
+
+   THe INNER JOIN combines the rows of the two tables together to form a new
+   table. The rows of the tables are joined only if the value of one (or
+   more) user-specified columns are the same in both tables. If the values
+   of the column(s) are not the same, the table rows are not combined and
+   added to the new table.
+
+   Since the INNER JOIN joins the two tables based on the criteria of user
+   specified columns both existing and having the same value in both tables,
+   table1 and table2 can be exchanged without changing the behavior of the
+   join command.
+
+   Unlike the INNER JOIN, both the LEFT JOIN and RIGHT JOIN do behave
+   differently if the order of the tables is reversed.
+
+   In a LEFT JOIN, the syntax is "left LEFT JOIN right".  Each row in the left
+   table is processed and displayed. If the corresponding data in the right
+   table is available, it is displayed. Otherwise, NULL is displayed.
+
+   In a RIGHT JOIN, the syntax is "left RIGHT JOIN right".  Each row in the
+   right table is processed and displayed. If the corresponding data in the
+   left table is available, it is displayed. Otherwise, NULL is displayed.
 
 6) Why do these queries give different results? What does this tell you
 about using join conditions in the ON clause versus in the WHERE clause
@@ -37,3 +114,48 @@ LEFT JOIN played ON (track.album_id=played.album_id)
 WHERE track.track_id=played.track_id
 AND track.artist_id=3
 GROUP BY track_name, track.album_id;
+
+The two queries differ in their results for two reasons:
+
+(1) Both use different criteria in the USING clause for left joining the track
+    and played tables
+(2) Both use different criteria for selecing the results of the join using the
+    WHERE clause.
+
+The first query left joins the track and played tables, attempting to find
+rows in the played table where the track_id and album_id values from the
+track table match the values of the same columns in the rows of the played
+table.
+
+For each (track_id, album_id) value pair in the track table, there are zero
+or one rows in the played table.
+
+Based on the join criteria specified by the USING clause and the contents of
+both tables, the resulting left joined table contains 153 rows, one for each
+track described in the track table.
+
+Of these 153 rows, 13 contain a track.artist_id column equal to three.
+
+The second query left joins the track and played tables, attemting to find
+rows in the played table where the album_id value from the track table matches
+the value of the same column in the rows of the played table.
+
+For each album_id value in the track table, there are zero, one, or multiple
+rows in the played table.
+
+Based on the join criteria specified by the USING clause and the contents of
+both tables, the resulting left joined table contains 411 rows, one (or more)
+for each track described in the track table.
+
+Of these 411 rows, 3 contain identical track.track_id and played.track_id
+values as well as a track.artist_id value equal to three.
+
+So, what does this tell us?
+
+Both left and right joins should specify their join criteria using either the
+ON or USING clauses.
+
+The WHERE clause is designed to select the results of an expression, such as
+a left join based on specified criteria. The WHERE clause can be used instead
+of an left (or right) join and to suppelment a join, but it can't be used to
+specify the criteria to perform a join.
