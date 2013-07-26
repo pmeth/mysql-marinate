@@ -1,0 +1,60 @@
+Q1. When would you use a weak entity?
+
+   One would use a weak entity to represent an entity that cannot be uniquely
+   identified by its attributes alone.
+
+   A weak entity requires additional attributes, typically in the form of one
+   (or more) foreign key(s) to uniquely identify it in the context of the
+   overall database.
+
+   In the folowing simple example, the childA and childB entities are weak
+   entities, each requiring a (foreign key) attribute from the strong parent
+   entity to generate the primary key for each child entity key.
+
+         +--------+
+      +--> parent <--+
+      |  +--------+  |
+      |              |
+   +--+-----+     +--+-----+
+   | childA |     | childB |
+   +--------+     +--------+
+
+
+Q2. Is it better to use entities instead of attributes?
+
+   Typically, it is better to use entities instead of attributes, but you
+   should ask yourself the following questions regarding the nature of the
+   object before making the final decision:
+
+   If the object is of direct interest to the database, it should be an entity.
+   And any information that describes it should be stored in attributes of
+   that entity.
+
+   If the object has components of its own, we must find a way of representing
+   those components; a separate entity might be the best solution.
+
+   If the object can have multiple instances, we must find a way to store
+   data on each instance. The cleanest way to do this is to represent the
+   object as a separate entity.
+
+   If the object is often nonexistent or unknown, it is effectively an
+   attribute of only some of the entities, and it would be better to model
+   it as a separate entity rather than as an attribute that is often empty.
+
+Q3. Alter and extend the music database ER model so that it can store
+    compilations, where a compilation is an album that contains tracks by two
+    or more different artists.
+
+A See Learning mysql 4-3.dia
+
+Q4. Create an ER diagram for an online media store using the following
+    requirements:
+
+   o There are two types of product: music CDs and video DVDs.
+   o Customers can buy any number of each product.
+   o For each CD, store the title, the artist’s name, the label (publisher),
+     and the price. Also store the number, title, and length (in seconds) of
+     each track on the CD.
+   o For each video DVD, store the title the studio name, and the price.
+
+A See Learning mysql 4-4.dia

@@ -4,9 +4,40 @@ Exercises for Chapter 8
 which has its values separated by tabs, into the details table.
  Hint: the tab character is shown with the \t escape sequence.
 
+   LOAD DATA INFILE 'academics.tsv' INTO
+        TABLE details FIELDS TERMINATED BY '\t';
+
 2) When would you need to insert data using a query?
 
-3) What’s the difference between REPLACE and INSERT IGNORE?
+   You would need to insert data using a query, when you're creating or
+   updating a table in the current (or another database) based on the
+   data in another table.
+
+   For example, I can use a such a combination to create a new database table
+   (named 'myalbums'), which contains the names of the albums I own, and the
+   artists that released them, using two MySQL commands:
+
+   CREATE TABLE myalbums (
+          artist_id SMALLINT(5) NOT NULL DEFAULT 0,
+          album_id SMALLINT(5) NOT NULL DEFAULT 0,
+          artist_name CHAR(128) DEFAULT NULL,
+          album_name CHAR(128) DEFAULT NULL,
+          PRIMARY KEY (artist_id, album_id)
+   );
+
+   INSERT INTO myalbums (artist_id, album_id, artist_name, album_name)
+          SELECT artist_id, album_id, artist_name, album_name FROM artist
+          INNER JOIN album USING (artist_id) GROUP BY artist_id;s
+
+3) What's the difference between REPLACE and INSERT IGNORE?
+
+   If you try to insert a row of data with a duplcate primary key into a
+   table, REPLACE deletes tne existing row and replaces it with a new one.
+
+   If you try to insert a row of data with a duplcate primary key into a
+   table, INSERT IGNORE will silently refuse to do so, and retain the old
+   table row.
+
 
 4) What can you tell from this output produced by the EXPLAIN command?
 
@@ -25,6 +56,48 @@ which has its values separated by tabs, into the details table.
     ... |      12 | NULL  |  570 | Using where; Using index; Distinct |
     ... +---------+-------+------+------------------------------------+
     3 rows in set (0.00 sec)
+
+  The three rows indicate that three tables are being combined using a SQL
+  join:
+
+  o supervisor table
+  o student table
+  o supervises table
+
+  The 'supervisor' table has a four-byte primary key, likely a supervisor_id
+  integer field, which is being compared against a numeric constant. For
+  example:
+
+  select supervisor_id from supervisor where supervisor_id = 0;
+
+  The 'student' table has 95 rows, but it's not clear if it has a primary key.
+
+  The 'supervises' table has 570 rows and a twelve-byte primary key. Based on
+  the size of the primary key, it's likely three four-byte integer combined,
+  possibly a supervisor_id, student_id and course_id.
+
+  The number of rows in the 'supervises' table is evenly divisible by the
+  number of rows in the 'student' table: 570/95 = 6.
+
+  This suggests that there are 6 supervisors, one for each of the 6 courses
+  each student has registered in.
+
+  It's not clear how the 'student' and 'supervises' table are nbeing joined.
+
+  Based on the lack of a reference type in the 'ref' column and the large
+  number of rows in the 'rows' column, the tables are being joined without
+  using their primary index.
+
+  The 'Using where' phrase in the 'Extra' column of the last row indicate that
+  two of the tables were INNER JOINed using the ON keyword:
+
+  select COLUMN(S) from supervisor INNER JOIN supervises ON (supervisor_id)
+
+  or the results of joined tables are filtered using the WHERE keyword.
+
+  The 'Distinct' keyword in the 'Extra' column of the last row indicates that
+  the 'DISTINCT' keyword is used to remove any duplicates from
+  the output of a SELECT statement.
 
 5) What can you tell from this output produced by the EXPLAIN command?
 
@@ -57,4 +130,23 @@ which has its values separated by tabs, into the details table.
     ...+-----------------------------+
     5 rows in set (0.01 sec)
 
+Combine the played and track tables (from the music database) based on their
+common fields:
 
+o artist_id
+o album_id
+o track_id
+
+then use separate SELECT statements to alphabetically determine the first three
+and last three track names.
+
+Lastly, combine the results of both SELECTs using the UNION keyword.
+
+
+EXPLAIN (SELECT track_name, time FROM played         
+         INNER JOIN track USING (artist_id, album_id, track_id)
+         ORDER BY track_name ASC LIMIT 3)         
+         UNION 
+         (SELECT track_name, time FROM played         
+          INNER JOIN track USING (artist_id, album_id, track_id)
+          ORDER BY track_name DESC LIMIT 3);

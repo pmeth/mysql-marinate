@@ -1,16 +1,38 @@
 Exercises for chapter 9
 
-1) What’s the difference between a local and a remote user?
+1) What's the difference between a local and a remote user?
 
+   A local user connects to the mysql server on the local host using a
+   hostname of "localhost", the hostname of the host, the IP address
+   127.0.0.1 or the IP address of the host.
+
+   A remote user connects to the mysql server from any host other than the
+   host whwre the mysql server is running.
+   
 2) When would you grant only read access to a user?
 
-3) Write a GRANT statement to create a user, rowena, who has privileges to execute 
-SELECT, UPDATE, and INSERT statements on the contacts and appointment databases. 
-The user should be allowed to access the server from machines in the domain invyhome.com.
+   You should grant only read access to a user when they have no requirement
+   modify the databases hosted by the mysql server
 
-4) Write a GRANT statement that modifies the privileges of the user rowena created in 
-Question 3. Add privileges to SELECT from the customer table in the sales database, and to 
-SELECT the debtor column from the invoice table in the accounts database.
+3) Write a GRANT statement to create a user, rowena, who has privileges to
+   execute SELECT, UPDATE, and INSERT statements on the contacts and
+   appointment databases.
+
+   The user should be allowed to access the server from machines in the domain
+   invyhome.com.
+
+   GRANT SELECT,UPDATE,INSERT ON contacts.*
+         TO 'rowena'@'%.invyhome.com';
+   GRANT SELECT,UPDATE,INSERT ON appointment.*
+         TO 'rowena'@'%.invyhome.com';
+
+4) Write a GRANT statement that modifies the privileges of the user rowena
+   created in Question 3. Add privileges to SELECT from the customer table in
+   the sales database, and to SELECT the debtor column from the invoice table
+   in the accounts database.
+
+   GRANT SELECT ON sales.customer TO 'rowena'@'%.invyhome.com';
+   GRANT SELECT (debtor) ON accounts.invoice TO 'rowena'@'%.invyhome.com';
 
 5) Three GRANT statements have been issued on your MySQL server:
 
@@ -18,23 +40,76 @@ SELECT the debtor column from the invoice table in the accounts database.
  GRANT SELECT, UPDATE, INSERT, DELETE ON *.* TO 'hugh'@'%invyhome.com';
  GRANT SELECT ON *.* TO ''@'localhost';
 
- For each of the following attempts to connect to the server, state whether the connection is allowed and, if so, which user the client is connected as. Assume all connections are attempted from localhost:
+    For each of the following attempts to connect to the server, state whether
+    the connection is allowed and, if so, which user the client is connected
+    as. Assume all connections are attempted from localhost:
 
      a) mysql --user=hugh --host=localhost
 
+     If the fully-qualified name of "localhost" is hugh.invyhome.com, the
+     user hugh will match the first GRANT statement and login as
+     "hugh@localhost".
+
+     Otherwise, the user "hugh" will match the third entry and login as the
+     anonymous user ''@localhost.
+
      b) mysql --user=fred
+
+     The user "fred" will match the third entry and login as the anonymous
+     user ''@localhost.
 
      c) mysql
 
-6) You’ve been employed to evaluate the security of a MySQL installation. Assuming that you’re 
-already satisfied with the security configuration from the physical and operating system 
-perspective, list four things that you’d check about the MySQL server. For each item, explain 
-why you would check it and what you would expect the outcome to be.
+     The mysql monitor will match the third entry and login as the anonymous
+     user ''@localhost.
 
-7) You’ve recently installed a wireless access point for visitors to your office and configured 
-it so that machines that connect through it have IP addresses in the range 192.168.1.1 to 
-192.168.1.254. You’ve decided you want users who connect to your MySQL server from those IP 
-addresses to have only the SELECT privilege on the contacts database. What steps do you take 
-in your MySQL privilege tables to set this up?
+6) You've been employed to evaluate the security of a MySQL installation.
+   Assuming that you're already satisfied with the security configuration from
+   the physical and operating system perspective, list four things that you'd
+   check about the MySQL server. For each item, explain why you would check it
+   and what you would expect the outcome to be.
 
+   The four things I would do is:
 
+   (1) Ensure that the mysql root user has a secure password. In an out of the
+       box system, the mysql root password is blank. Since the root user has
+       read/write access to all databases, can create and remove users, can
+       grant and revoke access, it is vital that a secure password be assigned
+       the the account.
+
+   (2) Ensure a minimal number of mysql accounts for those applications or
+       users have proven that they require access. For those accounts that
+       are created, only assign the minimum access rights that they require.
+       For example, if a user requires only read access to a database,
+       specific tables within a database or specific columns within specific
+       database tables, there is no need to grant write access such as the
+       ability to insert or delete records from a database.
+
+       Minimizing both the number of mysql accounts that can access the
+       databases and the access rights of those accounts lowers the chances
+       of an accidental or malicious issue with the server and its data.
+
+   (3) Remove remnte access. Where possible, decrease the number of hosts that
+       are allowed to connect to the mysql server. Ideally, connections should
+       only be allowed from users on the local host.
+
+       Removing remote access to the mysql server removes the chances tbat the
+       mysql server will be attacked and compromised by a remote client.
+
+   (4) Remove anonymous access. If the mysql server has an anonymous user
+       account, any user can login without specifying a username. This
+       decreases the security of the server, which is bad.
+
+       In order to improve the security of the server, remove any anonymous
+       user accounts.
+
+7) You've recently installed a wireless access point for visitors to your
+   office and configured it so that machines that connect through it have IP
+   addresses in the range 192.168.1.1 to 192.168.1.254. You've decided you want
+   users who connect to your MySQL server from those IP addresses to have only
+   the SELECT privilege on the contacts database. What steps do you take in
+   your MySQL privilege tables to set this up?
+
+   INSERT INTO host VALUES ('192.168.1.%','contacts',
+          'Y','N','N','N','N','N','N','N','N','N','N','N');
+   FLUSH PRIVILEGES;
